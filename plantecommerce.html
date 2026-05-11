@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>FloraVision - Premium Plants</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: #0a0f0a;
+      color: #e4ede4;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0f0a
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a4e2a;
+      border-radius: 10px
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 64px;
+      background: transparent;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav.scrolled {
+      padding: 16px 64px;
+      background: rgba(10, 15, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-center a {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-center a:hover {
+      color: #fff;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+      stroke-width: 1.5;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      fill: none;
+    }
+
+    .nav-icon:hover {
+      opacity: 0.6;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 64px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1920&q=90') center/cover no-repeat;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(10, 15, 10, 0.3) 0%, rgba(10, 15, 10, 0.85) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin-top: -20px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(4.5rem, 11vw, 9.5rem);
+      font-weight: 700;
+      line-height: 0.85;
+      letter-spacing: -0.05em;
+      color: #fff;
+      margin-bottom: 28px;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      max-width: 540px;
+      margin-bottom: 48px;
+    }
+
+    .hero-btns {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .btn-buy-hero {
+      padding: 16px 48px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-buy-hero:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .btn-demo {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.1rem;
+      transition: opacity 0.3s;
+    }
+
+    .play-ring {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .btn-demo:hover .play-ring {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+
+    .hero-review {
+      position: absolute;
+      bottom: 48px;
+      left: 64px;
+      z-index: 3;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 28px;
+      max-width: 340px;
+      animation: fadeUp 0.8s 0.6s both;
+    }
+
+    .hr-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .hr-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hr-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    .stars {
+      color: #fbbf24;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    .hr-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+    }
+
+    .hero-plant {
+      position: absolute;
+      right: 64px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 48px;
+      padding: 48px;
+      width: 420px;
+      animation: fadeUp 1s 0.3s both;
+    }
+
+    .hp-img {
+      width: 100%;
+      height: 320px;
+      object-fit: contain;
+      margin-bottom: 32px;
+      filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.4));
+    }
+
+    .hp-label {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 10px;
+    }
+
+    .hp-name {
+      font-size: 2.25rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-buy-card {
+      padding: 16px 32px;
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-buy-card:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .hp-dots {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.4s;
+    }
+
+    .dot.active {
+      width: 32px;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .slide-arrow {
+      position: absolute;
+      right: 48px;
+      bottom: 180px;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .slide-arrow:hover {
+      color: #fff;
+    }
+
+    /* Common Sections Styles */
+    .sec {
+      padding: 120px 64px;
+    }
+
+    .sec-title-wrap {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .sec-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .plant-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 32px;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .plant-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .pc-img-box {
+      height: 280px;
+      overflow: hidden;
+    }
+
+    .pc-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .plant-card:hover .pc-img-box img {
+      transform: scale(1.1);
+    }
+
+    .pc-body {
+      padding: 32px;
+    }
+
+    .pc-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .pc-desc {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .pc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pc-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .pc-cart {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .pc-cart:hover {
+      background: #fff;
+    }
+
+    .pc-cart:hover svg {
+      stroke: #000;
+    }
+
+    .o2-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 48px;
+      display: flex;
+      overflow: hidden;
+      min-height: 500px;
+    }
+
+    .o2-img-col {
+      width: 45%;
+    }
+
+    .o2-img-col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .o2-text-col {
+      flex: 1;
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .o2-text-col h3 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .o2-text-col p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .rev-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 32px;
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s;
+    }
+
+    .rev-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-5px);
+    }
+
+    .footer {
+      background: #050805;
+      padding: 100px 64px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr;
+      gap: 80px;
+      margin-bottom: 80px;
+    }
+
+    .f-tagline {
+      color: rgba(255, 255, 255, 0.4);
+      margin: 24px 0 32px;
+      line-height: 1.7;
+      max-width: 360px;
+    }
+
+    .f-socials {
+      display: flex;
+      gap: 24px;
+    }
+
+    .f-soc {
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .f-soc:hover {
+      color: #fff;
+    }
+
+    .f-links h4 {
+      font-size: 1.2rem;
+      margin-bottom: 24px;
+    }
+
+    .f-links a {
+      display: block;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .f-links a:hover {
+      color: #fff;
+    }
+
+    .news-form {
+      display: flex;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .news-input {
+      flex: 1;
+      padding: 18px 24px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      outline: none;
+    }
+
+    .news-btn {
+      padding: 0 32px;
+      background: #fff;
+      color: #000;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      background: #2a4e2a;
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      z-index: 10000;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      animation: fadeUp 0.3s;
+    }
+
+    @media (max-width: 1200px) {
+      .nav {
+        padding: 24px 32px;
+      }
+
+      .sec {
+        padding: 80px 32px;
+      }
+
+      .grid-3,
+      .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .o2-card {
+        flex-direction: column;
+      }
+
+      .o2-img-col {
+        width: 100%;
+        height: 350px;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .grid-3,
+      .reviews-grid,
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .sec-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" id="navbar">
+    <div class="nav-logo">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <path d="M20 35C20 35 32 28 32 18C32 11.3726 26.6274 6 20 6C13.3726 6 8 11.3726 8 18C8 28 20 35 20 35Z"
+          fill="#5cb85c" />
+        <path d="M20 32C20 32 28 26 28 18C28 13.5817 24.4183 10 20 10C15.5817 10 12 13.5817 12 18C12 26 20 32 20 32Z"
+          fill="#3a8a3a" />
+        <rect x="16" y="34" width="8" height="4" rx="2" fill="#c8855a" />
+      </svg>
+      <span class="logo-text">FloraVision.</span>
+    </div>
+    <div class="nav-center">
+      <a href="#">Home</a>
+      <a href="#types">Plants Type <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <polyline points="6 9 12 15 18 9" />
+        </svg></a>
+      <a href="#shop">Shop</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 01-8 0" />
+      </svg>
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-h1">Earth's<br>Exhale</h1>
+      <p class="hero-sub">"Earth Exhale" symbolizes the purity and vitality of the Earth's natural environment and its
+        essential role in sustaining life.</p>
+      <div class="hero-btns">
+        <a href="#shop" class="btn-buy-hero">Buy Now</a>
+        <div class="btn-demo">
+          <div class="play-ring">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+          </div>
+          Live Demo...
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="hero-plant">
+      <img src="https://mybageecha.com/cdn/shop/products/IMG_0416_1024x.jpg?v=1751106100" class="hp-img" alt="Plant" />
+      <div class="hp-label">Indoor Plant</div>
+      <div class="hp-name">Aglaonema plant</div>
+      <button class="btn-buy-card" onclick="addCart('Aglaonema')">Buy Now</button>
+      <div class="slide-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </div>
+      <div class="hp-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDY PLANTS -->
+  <section class="sec" id="trendy" style="background:#080c08">
+    <div class="sec-title-wrap reveal">
+      <h2 class="sec-title">Our Trendy Plants</h2>
+    </div>
+    <div class="o2-card reveal" style="max-width:1100px; margin:0 auto;">
+      <div class="o2-img-col">
+        <img src="https://images.unsplash.com/photo-1598880940080-ff9a29891b85?w=800&q=85" alt="Trendy" />
+      </div>
+      <div class="o2-text-col">
+        <h3 style="font-size:2rem;">For Your Desks Decorations</h3>
+        <p>I recently added a beautiful desk decoration plant to my workspace, and it has made such a positive
+          difference!</p>
+        <div style="font-size:2.5rem; font-weight:700; margin-bottom:32px;">Rs. 599/-</div>
+        <div style="display:flex; gap:20px;">
+          <button class="btn-buy-hero" style="padding:12px 32px; font-size:1rem;">Explore</button>
+          <div class="pc-cart" onclick="addCart('Desk Plant')"><svg width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="#fff" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOP SELLING -->
+  <section class="sec" id="shop">
+    <div class="sec-title-wrap reveal">
+      <h2 class="sec-title">Our Top Selling Plants</h2>
+    </div>
+    <div class="grid-3" id="topGrid"></div>
+  </section>
+
+  <!-- O2 PLANTS -->
+  <section class="sec" id="o2" style="background:rgba(255,255,255,0.02)">
+    <div class="sec-title-wrap reveal">
+      <h2 class="sec-title">Our Best O2 Plants</h2>
+    </div>
+    <div class="o2-card reveal" style="max-width:1100px; margin:0 auto;">
+      <div class="o2-img-col">
+        <img
+          src="https://unlimitedgreens.com/cdn/shop/files/Combo---2-Front.jpg?v=1684213448"
+          alt="O2" />
+      </div>
+      <div class="o2-text-col">
+        <h3>We Have Small And Best O2 Plants Collections</h3>
+        <p>Oxygen-producing plants, often referred to as "O2 plants," are those that release oxygen into the atmosphere
+          through the process of photosynthesis.</p>
+        <p>Many plants can help filter out pollutants and toxins from the air, improving indoor air quality and mental
+          well-being.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPES -->
+  <section class="sec" id="types">
+    <div class="sec-title-wrap reveal">
+      <h2 class="sec-title">Types Of Plants</h2>
+    </div>
+    <div class="grid-3" id="typesGrid"></div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="sec" style="background:rgba(255,255,255,0.02)">
+    <div class="sec-title-wrap reveal">
+      <h2 class="sec-title">Customer Reviews</h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="rev-card reveal">
+        <div class="hr-top">
+          <img src="https://img.magnific.com/free-photo/portrait-good-looking-smiling-arabic-man-suit-attractive-young-businessman-with-beard-moustache-looking-camera-portrait-international-beauty-concept_74855-21597.jpg?semt=ais_hybrid&w=740&q=80" class="hr-avatar"
+            alt="User" />
+          <div>
+            <div class="hr-name">Zeeshan Faiz</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <p class="hr-text">Just got my hands on some absolutely awesome plants, and I couldn't be happier!</p>
+      </div>
+      <div class="rev-card reveal">
+        <div class="hr-top">
+          <img src="https://indiantelevision.com/wp-content/uploads/2025/11/Neha-Kulwal-1.jpg" class="hr-avatar"
+            alt="User" />
+          <div>
+            <div class="hr-name">Ananya Iyer</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <p class="hr-text">Each one has its own unique charm and personality. The vibrant colors make such a huge
+          difference in my home.</p>
+      </div>
+      <div class="rev-card reveal">
+        <div class="hr-top">
+          <img src="https://img.magnific.com/premium-photo/confident-indian-businessman-stands-with-arms-crossed-wears-dark-suit-white-shirt-smiles-warmly_1343747-3936.jpg?semt=ais_hybrid&w=740&q=80" class="hr-avatar"
+            alt="User" />
+          <div>
+            <div class="hr-name">Rohit Maity</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <p class="hr-text">It's like bringing a little piece of nature indoors. Definitely worth the investment!</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="footer-top">
+      <div>
+        <div class="nav-logo">
+          <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+            <path d="M20 35C20 35 32 28 32 18C32 11.3726 26.6274 6 20 6C13.3726 6 8 11.3726 8 18C8 28 20 35 20 35Z"
+              fill="#5cb85c" />
+            <rect x="16" y="34" width="8" height="4" rx="2" fill="#c8855a" />
+          </svg>
+          <span class="logo-text" style="font-size:1.2rem;">FloraVision.</span>
+        </div>
+        <p class="f-tagline">"From lush indoor greens to vibrant outdoor blooms, our plants are crafted to thrive and
+          elevate your living environment."</p>
+        <div class="f-socials">
+          <span class="f-soc">FB</span><span class="f-soc">TW</span><span class="f-soc">LI</span>
+        </div>
+      </div>
+      <div class="f-links">
+        <h4>Quick Links</h4>
+        <a href="#">Home</a><a href="#types">Types Of Plants</a><a href="#contact">Contact</a>
+      </div>
+      <div>
+        <h4>Stay Updated</h4>
+        <div class="news-form">
+          <input type="email" class="news-input" placeholder="Enter Email" />
+          <button class="news-btn">JOIN</button>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; color:rgba(255,255,255,0.2); font-size:0.9rem;">FloraVision © 2026 all rights
+      reserved</div>
+  </footer>
+
+  <script>
+    const CART_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>`;
+
+    const topPlants = [
+      { name: "Aglaonema plant", desc: "Celebrated for its attractive foliage and exceptional ease of care.", price: "Rs. 300/-", img: "https://mybageecha.com/cdn/shop/products/IMG_0416_1024x.jpg?v=1751106100" },
+      { name: "Plantain Lilies", desc: "Primarily grown for their lush, decorative leaves which come in wide varieties.", price: "Rs. 389/-", img: "https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=700&q=85" },
+      { name: "Cactus", desc: "Known for its ability to thrive in arid environments and store water.", price: "Rs. 259/-", img: "https://www.juneflowers.com/wp-content/uploads/2022/08/Cactus-Plant.jpg" }
+    ];
+    const typesPlants = [
+      { name: "Swiss cheese Plant", desc: "A popular tropical houseplant known for its distinctive perforated leaves.", price: "Rs. 400/-", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=700&q=85" },
+      { name: "Sansevieria plant", desc: "Striking architectural appearance and ultra low-maintenance nature.", price: "Rs. 450/-", img: "https://www.hariththarang.com/cdn/shop/products/image_ab2e69ac-ff94-4581-b20a-d1668c51831c_1024x1024.jpg?v=1667889348" },
+      { name: "Agave plant", desc: "Striking rosette of thick, fleshy leaves and architectural forms.", price: "Rs. 359/-", img: "https://images.unsplash.com/photo-1567331711402-509c12c41959?w=700&q=85" }
+    ];
+
+    function mkCard(p) {
+      return `<div class="plant-card reveal">
+        <div class="pc-img-box"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
+        <div class="pc-body">
+          <div class="pc-name">${p.name}</div>
+          <div class="pc-desc">${p.desc}</div>
+          <div class="pc-footer">
+            <span class="pc-price">${p.price}</span>
+            <div class="pc-cart" onclick="addCart('${p.name}')">${CART_SVG}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    document.getElementById('topGrid').innerHTML = topPlants.map(mkCard).join('');
+    document.getElementById('typesGrid').innerHTML = typesPlants.map(mkCard).join('');
+
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    function addCart(n) {
+      document.querySelectorAll('.toast').forEach(t => t.remove());
+      const t = document.createElement('div'); t.className = 'toast';
+      t.textContent = `✓ ${n} added to cart`; document.body.appendChild(t);
+      setTimeout(() => { t.style.transition = 'opacity 0.4s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400) }, 2400);
+    }
+  </script>
+</body>
+
+</html>
